@@ -13,9 +13,18 @@ app.get('/', (req, res) => {
     res.send('HTTP GET request sent to root API endpoint');
 });
 
-app.post('/api/users', (req, res) => {
-    console.log(req.body);
-    res.status(200).send(req.body); 
+app.post('/api/users', async (req, res) => {
+    try {
+        const { name, email, password } = req.body;
+        const newUser = new User({ name, email, password });
+        await newUser.save();
+        res.status(201).json(newUser); 
+    } catch (error) {
+        res.status(500).json({ message: 'Error registering user', error });
+    }
 });
 
-app.listen(3000, () => console.log(`Express server running on port 3000`));
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Express server running on port ${PORT}`);
+});
