@@ -2,11 +2,13 @@
   "name": "raymond-pugh",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node -r esm server.js",
-    "server":"nodemon -r esm server.js"
+    "start": "node server.js",
+    "server": "nodemon server.js"
   },
+  
   "author": "",
   "license": "ISC",
   "description": "",

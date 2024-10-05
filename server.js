@@ -1,9 +1,30 @@
-import express from "express";
+import express from 'express';
+import mongoose from 'mongoose';
+import connectDatabase from './config/db.js';
+import User from './models/Users.js';
 
 const app = express();
 
-app.get('/',(req,res)=>
-res.send('http get request sent to root api endpoint')
-);
+app.use(express.json()); 
 
-app.listen(3000,()=>console.log(`Express server running on port 3000`));
+connectDatabase();
+
+app.get('/', (req, res) => {
+    res.send('HTTP GET request sent to root API endpoint');
+});
+
+app.post('/api/users', async (req, res) => {
+    try {
+        const { name, email, password } = req.body;
+        const newUser = new User({ name, email, password });
+        await newUser.save();
+        res.status(201).json(newUser); 
+    } catch (error) {
+        res.status(500).json({ message: 'Error registering user', error });
+    }
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Express server running on port ${PORT}`);
+});
